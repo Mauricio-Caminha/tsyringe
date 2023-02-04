@@ -33,7 +33,7 @@
                     "201": {
                         "description": "Created"
                     },
-                    "500": {
+                    "400": {
                         "description": "Category already exists"
                     }
                 }
@@ -87,6 +87,9 @@
                 "responses": {
                     "201": {
                         "description": "Created"
+                    },
+                    "400": {
+                        "description": "Categories already exists"
                     }
                 }
             }
@@ -115,7 +118,7 @@
                     "201": {
                         "description": "Created"
                     },
-                    "500": {
+                    "400": {
                         "description": "Specification already exists"
                     }
                 }
