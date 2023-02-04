@@ -51,13 +51,42 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
+                                    "minItems": 2,
                                     "items": {
                                         "$ref": "#/definitions/Category"
-                                    },
-                                    "minItems": 2
+                                    }
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/categories/import": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Upload a new category",
+                "description": "Upload a new category from file",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
                     }
                 }
             }
@@ -104,10 +133,10 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
+                                    "minItems": 2,
                                     "items": {
                                         "$ref": "#/definitions/Specification"
-                                    },
-                                    "minItems": 2
+                                    }
                                 }
                             }
                         }
@@ -120,28 +149,22 @@
         "Category": {
             "type": "object",
             "properties": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    }
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
                 }
             }
         },
         "Specification": {
             "type": "object",
             "properties": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "description": {
-                        "type": "string"
-                    }
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
                 }
             }
         }
