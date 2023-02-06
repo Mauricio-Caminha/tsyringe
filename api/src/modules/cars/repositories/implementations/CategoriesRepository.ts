@@ -1,11 +1,14 @@
-import { Category } from "../entities/Category";
-import { ICategoriesRepository, ICreateCategoryDTO } from "./implementations/ICategoriesRepository";
 import { getRepository, Repository } from "typeorm";
+
+import { Category } from "../../entities/Category";
+import {
+    ICategoriesRepository,
+    ICreateCategoryDTO,
+} from "../ICategoriesRepository";
 
 // Singleton -> Cria UMA instância GLOBAL -> não se usa para tudo
 // DTO => Data Transfer Object
 class CategoriesRepository implements ICategoriesRepository {
-
     private repository: Repository<Category>;
 
     private static INSTANCE: CategoriesRepository;
@@ -21,12 +24,12 @@ class CategoriesRepository implements ICategoriesRepository {
         });
 
         await this.repository.save(category);
-    };
+    }
 
     async list(): Promise<Category[]> {
         const categories = await this.repository.find();
         return categories;
-    };
+    }
 
     async findByName(name: string): Promise<Category> {
         const categoryAlreadyExists = await this.repository.findOne({ name });

@@ -1,11 +1,14 @@
-import { Specification } from "../entities/Specification";
-import { ICreateSpecificationDTO, ISpecificationRepository } from "./implementations/ISpecificationsRepository";
 import { getRepository, Repository } from "typeorm";
+
+import { Specification } from "../../entities/Specification";
+import {
+    ICreateSpecificationDTO,
+    ISpecificationRepository,
+} from "../ISpecificationsRepository";
 
 // Singleton -> Cria UMA instância GLOBAL -> não se usa para tudo
 
 class SpecificationsRepository implements ISpecificationRepository {
-
     private repository: Repository<Specification>;
 
     private static INSTANCE: SpecificationsRepository;
@@ -14,7 +17,10 @@ class SpecificationsRepository implements ISpecificationRepository {
         this.repository = getRepository(Specification);
     }
 
-    async create({ name, description }: ICreateSpecificationDTO): Promise<void> {
+    async create({
+        name,
+        description,
+    }: ICreateSpecificationDTO): Promise<void> {
         const specification = this.repository.create({
             name,
             description,
@@ -29,7 +35,9 @@ class SpecificationsRepository implements ISpecificationRepository {
     }
 
     async findByName(name: string): Promise<Specification> {
-        const specificationAlreadyExists = await this.repository.findOne({ name });
+        const specificationAlreadyExists = await this.repository.findOne({
+            name,
+        });
         return specificationAlreadyExists;
     }
 }
