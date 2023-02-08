@@ -3,13 +3,13 @@ import { Router } from "express";
 import { CreateSpecificationController } from "../modules/cars/useCases/createSpecification/CreateSpecificationController";
 import { ListSpecificationsController } from "../modules/cars/useCases/listSpecifications/ListSpecificationsController";
 
-const specificationRoutes = Router();
+const specificationsRoutes = Router();
 
 const createSpecificationController = new CreateSpecificationController();
 const listSpecificationsController = new ListSpecificationsController();
 
-specificationRoutes.post("/", createSpecificationController.handle);
+specificationsRoutes.post("/", createSpecificationController.handle);
 
-specificationRoutes.get("/", listSpecificationsController.handle);
+specificationsRoutes.get("/", listSpecificationsController.handle);
 
-export { specificationRoutes };
+export { specificationsRoutes };

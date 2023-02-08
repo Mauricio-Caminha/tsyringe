@@ -11,12 +11,6 @@ class UsersRepository implements IUsersRepository {
         this.repository = getRepository(User);
     }
 
-    async findByName(name: string): Promise<User> {
-        throw new Error("Method not implemented.");
-    }
-    async list(): Promise<User[]> {
-        throw new Error("Method not implemented.");
-    }
     async create(data: ICreateUsersDTO): Promise<void> {
         const user = this.repository.create({
             name: data.name,
@@ -27,6 +21,16 @@ class UsersRepository implements IUsersRepository {
         });
 
         await this.repository.save(user);
+    }
+
+    async list(): Promise<User[]> {
+        const users = await this.repository.find();
+        return users;
+    }
+
+    async findByName(name: string): Promise<User> {
+        const userAlreadyExists = await this.repository.findOne({ name });
+        return userAlreadyExists;
     }
 }
 
