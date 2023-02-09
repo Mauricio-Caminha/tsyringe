@@ -8,9 +8,7 @@ class CreateUserController {
         try {
             const data = request.body;
 
-            const createUserUseCase = container.resolve(
-                CreateUserUseCase
-            );
+            const createUserUseCase = container.resolve(CreateUserUseCase);
 
             await createUserUseCase.execute(data);
 
