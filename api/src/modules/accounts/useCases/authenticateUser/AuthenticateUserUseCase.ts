@@ -1,6 +1,6 @@
-import { inject, injectable } from "tsyringe";
-import { sign } from "jsonwebtoken"
 import { compare } from "bcrypt";
+import { sign } from "jsonwebtoken";
+import { inject, injectable } from "tsyringe";
 
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
@@ -22,7 +22,7 @@ class AuthenticateUserUseCase {
     constructor(
         @inject("UsersRepository")
         private usersRepository: IUsersRepository
-    ) { }
+    ) {}
 
     async execute({ email, password }: IRequest): Promise<IResponse> {
         const user = await this.usersRepository.findByEmail(email);
@@ -39,7 +39,7 @@ class AuthenticateUserUseCase {
 
         const token = sign({}, "8420111445f26166edfb4f7bfec5e34e", {
             subject: user.id,
-            expiresIn: "1d"
+            expiresIn: "1d",
         });
 
         const returnToken: IResponse = {
@@ -52,7 +52,6 @@ class AuthenticateUserUseCase {
 
         return returnToken;
     }
-
 }
 
 export { AuthenticateUserUseCase };
