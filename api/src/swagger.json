@@ -3,11 +3,22 @@
     "info": {
         "title": "RentX Documentation",
         "description": "This is an API Rent",
-        "version": "1.0.0",
+        "termsOfService": "http://localhost:3333/terms",
         "contact": {
             "email": "mauricio.caminha@hotmail.com"
-        }
+        },
+        "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "http://localhost:3333",
+            "description": "Dev API"
+        },
+        {
+            "url": "https://www.deploy.com",
+            "description": "Production API"
+        }
+    ],
     "paths": {
         "/categories": {
             "post": {
@@ -20,7 +31,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/definitions/Category"
+                                "$ref": "#/components/schemas/Category"
                             },
                             "example": {
                                 "name": "Category name sample",
@@ -53,7 +64,7 @@
                                     "type": "array",
                                     "minItems": 2,
                                     "items": {
-                                        "$ref": "#/definitions/Category"
+                                        "$ref": "#/components/schemas/Category"
                                     }
                                 }
                             }
@@ -105,7 +116,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/definitions/Specification"
+                                "$ref": "#/components/schemas/Specification"
                             },
                             "example": {
                                 "name": "Specification name sample",
@@ -138,7 +149,7 @@
                                     "type": "array",
                                     "minItems": 2,
                                     "items": {
-                                        "$ref": "#/definitions/Specification"
+                                        "$ref": "#/components/schemas/Specification"
                                     }
                                 }
                             }
@@ -150,40 +161,81 @@
         "/users": {
             "post": {
                 "tags": [
-                    "Users"
+                    "User"
                 ],
-                "summary": "Create an user",
-                "description": "Create a new user",
+                "summary": "Create a User",
+                "description": "Create a new User",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/definitions/UserCreation"
+                                "$ref": "#/components/schemas/userBodyRequest"
                             },
-                            "example": {
-                                "name": "User name sample",
-                                "password": "User password sample",
-                                "email": "User email sample",
-                                "driver_license": "User drivers license sample"
+                            "examples": {
+                                "userBodyRequest": {
+                                    "value": {
+                                        "name": "Maurício",
+                                        "email": "mauricio.caminha@hotmail.com"
+                                    }
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userBodyResponse"
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "User already exists"
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userErrorResponse"
+                                },
+                                "examples": {
+                                    "userErrorResponse": {
+                                        "value": {
+                                            "error": "This user already Exists."
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
             "get": {
                 "tags": [
-                    "Users"
+                    "User"
                 ],
-                "summary": "List all users",
-                "description": "List all users",
+                "summary": "Shows all users profiles",
+                "description": "Shows all users profiles if you are a Admin",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "user_id",
+                        "description": "User id",
+                        "in": "header",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -193,7 +245,146 @@
                                     "type": "array",
                                     "minItems": 2,
                                     "items": {
-                                        "$ref": "#/definitions/User"
+                                        "$ref": "#/components/schemas/userBodyResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userErrorResponse"
+                                },
+                                "examples": {
+                                    "userErrorResponse": {
+                                        "value": {
+                                            "error": "Forbbiden."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Shows user profile",
+                "description": "Shows user profile",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "user_id",
+                        "description": "User id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userBodyResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userErrorResponse"
+                                },
+                                "examples": {
+                                    "userErrorResponse": {
+                                        "value": {
+                                            "error": "User not found!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update the admin attribute of user",
+                "description": "The admin attribute turns true",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "required": true,
+                        "name": "user_id",
+                        "description": "User id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userBodyResponse"
+                                },
+                                "examples": {
+                                    "userBodyResponse": {
+                                        "value": {
+                                            "id": "38af88b5-a44e-4e9d-8eaa-41a82d6b19b1",
+                                            "admin": true,
+                                            "name": "Maurício",
+                                            "email": "mauricio.caminha@hotmail.com",
+                                            "created_at": "2023-01-30T19:18:46.409Z",
+                                            "updated_at": "2023-01-30T19:18:56.694Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userErrorResponse"
+                                },
+                                "examples": {
+                                    "userErrorResponse": {
+                                        "value": {
+                                            "error": "User not found!"
+                                        }
                                     }
                                 }
                             }
@@ -203,72 +394,81 @@
             }
         }
     },
-    "definitions": {
-        "Category": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                }
-            }
-        },
-        "Specification": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                }
-            }
-        },
-        "User": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "driver_license": {
-                    "type": "string"
-                },
-                "admin": {
-                    "type": "boolean"
-                },
-                "avatar": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                }
-            },
-            "UserCreation": {
+    "components": {
+        "schemas": {
+            "Category": {
                 "type": "object",
                 "properties": {
                     "name": {
                         "type": "string"
                     },
-                    "password": {
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Specification": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "userBodyRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
                         "type": "string"
                     },
                     "email": {
                         "type": "string"
+                    }
+                }
+            },
+            "userBodyResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
                     },
-                    "driver_license": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "admin": {
+                        "type": "boolean",
+                        "default": "false"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "userErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "error": {
                         "type": "string"
                     }
+                }
+            },
+            "securitySchemes": {
+                "bearerAuth": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT"
                 }
             }
         }
