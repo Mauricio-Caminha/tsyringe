@@ -1,0 +1,9 @@
+1 - Unit tests
+-> useCases
+
+2 - Integration tests
+-> routes -> controllers -> useCases -> repository
+<- repository <- useCases <- controllers <- routes
+
+TDD - Test Driven Development
+First we create the test and then the useCase
